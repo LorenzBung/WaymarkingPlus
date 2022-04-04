@@ -1,0 +1,33 @@
+#wrap {
+  max-width: 100% !important;
+}
+#content {
+  width: 100% !important;
+  float: none;
+}
+#sidebar {
+  width: 100% !important;
+  max-width: 100% !important;
+  float: none !important;
+  clear: none !important;
+}
+#map_canvas {
+  height: 70vh;
+}
+#uxSearchFromHere {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-family: "Lucida Sans Unicode";
+  margin: 0 !important;
+  cursor: pointer;
+  font-size: 20px;
+  box-shadow: 0 1px 5px rgb(0 0 0 / 65%);
+	border-radius: 4px;
+	background-color: white;
+	font-color: black;
+	border: none;
+}
+#uxSearchFromHere:hover {
+	background-color: #f4f4f4;
+}
