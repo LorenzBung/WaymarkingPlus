@@ -1,26 +1,47 @@
-/*chrome.tabs.onActivated.addListener(run);
+chrome.tabs.onUpdated.addListener(run);
+chrome.tabs.onActivated.addListener(run);
 
 function run() {
-  let isCorrectUrl = checkPageUrl();
-  
-  if (isCorrectUrl) {
-    chrome.scripting.executeScript({
-      injection: '(' + scaleMap + ')();'
-    }, (results) => {
-      console.log(results);
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    var enableWidescreen, enableBiggerMap;
+    let tab = tabs[0];
+    let url = new URL(tab.url);
+    chrome.storage.sync.get({
+      options: { 'enableWidescreen': true, 'enableBiggerMap': true }
+    }, function(items) {
+      console.log(items.options);
+      enableWidescreen = items.options.enableWidescreen;
+      enableBiggerMap = items.options.enableBiggerMap;
+      
+      
+      console.log("running checks...");
+      //if (checkPageUrl(url)) {
+      if (true) {
+        console.log(enableWidescreen + enableBiggerMap);
+        if (enableWidescreen) {
+          console.log(enableWidescreen + "enabling css");
+          // load the css
+          chrome.scripting.insertCSS({
+            target: { tabId: tab.id },
+            files: ['contentScript.css']
+          });
+        }
+        if (enableBiggerMap) {
+          console.log(enableBiggerMap + "enabling js");
+          // execute the script
+          chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['contentScript.js']
+          });
+        }
+      }
     });
-  }
+  });
 };
 
-async function checkPageUrl() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
-  let url = new URL(tab.url);
-  console.log("Title: '" + tab.title + "', Url: '" + url.hostname + "'");
-  chrome.tabs.sendMessage(tab.id, {text: 'report_back'}, scaleMap);
-  return url.hostname === "www.waymarking.com";
+function checkPageUrl(url) {
+  // TODO do the matching here...
+  console.log(url);
+  return url.hostname === "www.waymarking.com" && url.pathname === "/wm/search.aspx";
 };
 
-function scaleMap() {
-  console.log("Hello!");
-};*/
